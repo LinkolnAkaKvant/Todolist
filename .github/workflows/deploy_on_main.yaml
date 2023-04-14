@@ -15,7 +15,7 @@ jobs:
       - uses: docker/build-push-action@v4
         with:
           push: true
-          file: Dockerfile
+          file: Dockerfile.prod
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/diploma_app:latest
 
   deploy:
