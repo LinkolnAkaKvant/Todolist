@@ -41,6 +41,4 @@ services:
 
 volumes:
   pg_diploma_data:
-    driver: local
   django_static:
-    driver: local
