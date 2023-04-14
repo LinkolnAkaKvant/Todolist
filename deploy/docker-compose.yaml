@@ -1,7 +1,6 @@
 version: "3.9"
 services:
   db:
-    container_name: todolist-db
     image: postgres:15.1
     restart: always
     environment:
