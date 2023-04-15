@@ -9,6 +9,8 @@ services:
       DB_NAME: ${DB_NAME}
     volumes:
       - pg_diploma_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
     healthcheck:
       test: pg_isready -U ${DB_USER} -d ${DB_NAME}
       timeout: 3s
@@ -23,6 +25,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    ports:
+      - "8000:8000"
     volumes:
       - django_static:/diploma_app/static
 
