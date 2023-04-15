@@ -10,7 +10,7 @@ services:
     volumes:
       - pg_diploma_data:/var/lib/postgresql/data/
     healthcheck:
-      test: pg_isready -U ${DB_USER} -d ${DB_NAME}
+      test: pg_isready -U $DB_USER -d $DB_NAME
       timeout: 3s
       retries: 10
       interval: 3s
@@ -23,7 +23,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
     volumes:
       - django_static:/diploma_app/static
 
