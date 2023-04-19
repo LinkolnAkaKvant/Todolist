@@ -43,3 +43,4 @@ volumes:
     driver: local
   django_static:
     driver: local
+
