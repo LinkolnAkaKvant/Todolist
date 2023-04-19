@@ -3,6 +3,7 @@
 #excepts
 !todolist/**
 !core/**
+!goals/**
 !manage.py
 !entrypoint.sh
 !requirements.txt
