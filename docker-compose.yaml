@@ -32,6 +32,7 @@ services:
     volumes:
       - ./todolist:/diploma_app/todolist
       - ./core:/diploma_app/core
+      - ./goals:/diploma_app/goals
       - django_static:/diploma_app/static
 
   front:
