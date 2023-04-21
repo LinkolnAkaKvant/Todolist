@@ -1,8 +1,9 @@
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
+from rest_framework.exceptions import PermissionDenied
 
 from core.serializers import ProfileSerializer
-from goals.models import GoalCategory, Goal, GoalComment
+from goals.models import GoalCategory, Goal, GoalComment, Board
 
 
 class GoalCategoryCreateSerializer(serializers.ModelSerializer):
@@ -34,7 +35,8 @@ class GoalCreateSerializer(serializers.ModelSerializer):
     def validate_category(self, value):
         if value.is_deleted:
             raise ValidationError(message="Категория не найдена")
-
+        if self.context['request'].user.id != value.user_id:
+            raise PermissionDenied
         return value
 
 
@@ -55,6 +57,13 @@ class GoalCommentCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('id', 'user', 'created', 'updated')
 
+    def validate_goal(self, value):
+        if value.is_deleted:
+            raise ValidationError(message="Цель не найдена")
+        if self.context['request'].user.id != value.user_id:
+            raise PermissionDenied
+        return value
+
 
 class GoalCommentSerializer(serializers.ModelSerializer):
     user = ProfileSerializer(read_only=True)
@@ -65,3 +74,9 @@ class GoalCommentSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created', 'updated', 'user', 'goal')
 
 
+class BoardCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Board
+        fields = '__all__'
+        read_only_fields = ('id', 'created', 'updated', 'is_deleted')
