@@ -19,6 +19,7 @@ class GoalDateFilter(rest_framework.FilterSet):
         models.DateTimeField: {'filter_class': django_filters.IsoDateTimeFilter},
     }
 
+
 class CategoryBoardFilter(rest_framework.FilterSet):
     class Meta:
         model = GoalCategory
