@@ -124,7 +124,7 @@ class BoardCreatedView(CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        BoardParticipant.objects.created(user=self.request.user, board=serializer.save())
+        BoardParticipant.objects.create(user=self.request.user, board=serializer.save())
 
 
 class BoardLisrView(ListAPIView):
