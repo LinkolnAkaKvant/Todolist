@@ -105,7 +105,7 @@ class BoardCreateSerializer(serializers.ModelSerializer):
 
 class BoardParticipantsSerializer(serializers.ModelSerializer):
     role = serializers.ChoiceField(required=True, choices=BoardParticipant.Role.choices[1:])
-    user = serializers.SlugRelatedField(slug_field='user_name', queryset=User.objects.all())
+    user = serializers.SlugRelatedField(slug_field='user', queryset=User.objects.all())
 
     class Meta:
         model = BoardParticipant
