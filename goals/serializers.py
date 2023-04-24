@@ -79,10 +79,12 @@ class GoalCommentCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('id', 'user', 'created', 'updated')
 
-    def validate_goal(self, value):
-        if value.is_deleted:
-            raise ValidationError(message="Цель не найдена")
-        if self.context['request'].user.id != value.user_id:
+    def validate_goal(self, value: Goal):
+        if not BoardParticipant.objects.filter(
+                board=value.category.board.id,
+                user_id=self.context['request'].user.id,
+                role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.writer]
+        ):
             raise PermissionDenied
         return value
 
