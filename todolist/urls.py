@@ -6,6 +6,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('core/', include(('core.urls', 'core'))),
     path('goals/', include(('goals.urls', 'goals'))),
+    path('bot/', include(('bot.urls', 'bot'))),
     path('oauth/', include('social_django.urls', namespace="social")),
 ]
 

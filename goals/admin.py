@@ -28,7 +28,7 @@ admin.site.register(GoalComment, GoalCommentAdmin)
 
 
 class BoardAdmin(admin.ModelAdmin):
-    list_display = ('participants', 'title', )
+    list_display = ('title', 'is_deleted')
     readonly_fields = ('created', 'updated', )
 
 

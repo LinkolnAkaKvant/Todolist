@@ -26,8 +26,21 @@ services:
     volumes:
       - django_static:/diploma_app/static
 
+  bot:
+    image: vkarpovich/diploma_app:latest
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+      api:
+        condition: service_started
+    command: python ./manage.py runbot
+
   front:
-    image: sermalenk/skypro-front:lesson-37
+    image: sermalenk/skypro-front:lesson-38
     restart: always
     ports:
       - "80:80"

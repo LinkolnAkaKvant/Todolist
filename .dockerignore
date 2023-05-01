@@ -4,6 +4,7 @@
 !todolist/**
 !core/**
 !goals/**
+!bot/**
 !manage.py
 !entrypoint.sh
 !requirements.txt

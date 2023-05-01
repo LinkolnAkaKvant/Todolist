@@ -33,10 +33,25 @@ services:
       - ./todolist:/diploma_app/todolist
       - ./core:/diploma_app/core
       - ./goals:/diploma_app/goals
+      - ./bot:/diploma_app/bot
       - django_static:/diploma_app/static
 
+  bot:
+    build: .
+    restart: always
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+      api:
+        condition: service_started
+    command: python ./manage.py runbot
+
   front:
-    image: sermalenk/skypro-front:lesson-37
+    image: sermalenk/skypro-front:lesson-38
     restart: always
     ports:
       - "80:80"
@@ -46,7 +61,6 @@ services:
     volumes:
       - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf
       - django_static:/usr/share/nginx/html/static
-
 
 volumes:
   pg_diploma_data:
