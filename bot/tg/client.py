@@ -1,51 +1,36 @@
-import requests
 import logging
+from enum import Enum
 
-from bot.tg.dc import SendMessageResponse, GetUpdateResponse
+import requests
+
+from bot.tg.dc import GetUpdatesResponse, SendMessageResponse
+from todolist import settings
+
+
+class Command(str, Enum):
+    GET_UPDATES = 'getUpdates'
+    SEND_MESSAGE = 'sendMessage'
 
 
 class TgClient:
-    def __init__(self, token):
-        self.token = token
+    def __init__(self, token: str | None = None):
+        self.token = token if token else settings.BOT_TOKEN
 
-    def get_url(self, method: str):
+    def get_url(self, method: str) -> str:
         return f"https://api.telegram.org/bot{self.token}/{method}"
 
-    def get_updates(self, offset: int = 0, timeout: int = 60) -> GetUpdateResponse:
-
-        url = self.get_url('getUpdates')
-        params = {
-            'offset': offset,
-            'timeout': timeout
-        }
-
-        try:
-            response = requests.get(url=url, params=params)
-            return GetUpdateResponse(**response.json())
-        except Exception as e:
-            logging.error(
-                'Status code: %d, Response: %s',
-                response.status_code,
-                str(response.json()),
-            )
-            logging.error('Не удалось получить обновления')
-            raise e
+    def get_updates(self, offset: int = 0, timeout: int = 60) -> GetUpdatesResponse:
+        data = self._get(Command.GET_UPDATES, offset=offset, timeout=timeout)
+        return GetUpdatesResponse(**data)
 
     def send_message(self, chat_id: int, text: str) -> SendMessageResponse:
-        url = self.get_url('sendMessage')
-        data = {
-            'chat_id': chat_id,
-            'text': text
-        }
-        try:
-            response = requests.post(url=url, data=data)
-        except Exception as e:
-            logging.error(
-                'Status code: %d, Response: %s',
-                response.status_code,
-                str(response.json()),
-            )
-            logging.error('Не удалось отправить сообщение')
-            raise e
-        else:
-            return SendMessageResponse(**response.json())
+        data = self._get(Command.SEND_MESSAGE, chat_id=chat_id, text=text)
+        return SendMessageResponse(**data)
+
+    def _get(self, command: Command, **params) -> dict:
+        url = self.get_url(command)
+        response = requests.get(url, params=params)
+        if not response.ok:
+            print(response.json())
+            raise ValueError
+        return response.json()
