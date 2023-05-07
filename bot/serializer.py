@@ -22,5 +22,5 @@ class TgUserSerializer(serializers.ModelSerializer):
             raise ValidationError('Field is incorrect')
         return code
 
-    def update(self, instance: TgUser, validated_data: dict):
+    def update(self, instance: TgUser, validated_data: dict) -> TgUser:
         return self.tg_user

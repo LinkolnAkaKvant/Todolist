@@ -1,3 +1,5 @@
+from typing import Any
+
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -14,7 +16,7 @@ class VerificationView(GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = TgUserSerializer
 
-    def patch(self, request: Request, *args, **kwargs):
+    def patch(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 

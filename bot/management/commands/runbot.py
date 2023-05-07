@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 
 from django.core.management import BaseCommand
 
@@ -16,7 +17,7 @@ class Command(BaseCommand):
         self.tg_client = TgClient()
         self.offset = 0
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:
         logger.info('Bot start handling')
         while True:
             res = self.tg_client.get_updates(offset=self.offset)
@@ -24,7 +25,7 @@ class Command(BaseCommand):
                 self.offset = item.update_id + 1
                 self.handle_message(item.message)
 
-    def get_answer(self, chat_id):
+    def get_answer(self, chat_id) -> str | None:
         while True:
             res = self.tg_client.get_updates(offset=self.offset)
             for item in res.result:
@@ -35,7 +36,7 @@ class Command(BaseCommand):
                 else:
                     self.handle_message(item.message)
 
-    def create_goal(self, user, tg_user):
+    def create_goal(self, user, tg_user) -> Any:
         categories = GoalCategory.objects.all()
         cat_text = ''
         for cat in categories:
@@ -51,7 +52,7 @@ class Command(BaseCommand):
                                      priority=1)
         return result.pk
 
-    def handle_message(self, msg: Message):
+    def handle_message(self, msg: Message) -> None:
         tg_user, created = TgUser.objects.get_or_create(chat_id=msg.chat.id)
 
         if tg_user.user:
@@ -78,11 +79,11 @@ class Command(BaseCommand):
         else:
             self.handle_unauthorized(tg_user, msg)
 
-    def handle_unauthorized(self, tg_user: TgUser, msg: Message):
+    def handle_unauthorized(self, tg_user: TgUser, msg: Message) -> None:
         self.tg_client.send_message(msg.chat.id, 'Hello')
 
         code = tg_user.set_verification_code()
         self.tg_client.send_message(tg_user.chat_id, f'You verification code: {code}')
 
-    def handle_authorized(self, tg_user: TgUser, msg: Message):
+    def handle_authorized(self, tg_user: TgUser, msg: Message) -> None:
         logger.info('Authorized')

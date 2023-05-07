@@ -11,6 +11,9 @@ from core.serializers import CreateUserSerializer, ProfileSerializer, LoginSeria
 
 
 class SignUpView(GenericAPIView):
+    """
+    Вью для создания пользователя
+    """
     serializer_class = CreateUserSerializer
 
     def post(self, request, *args, **kwargs):
@@ -23,6 +26,9 @@ class SignUpView(GenericAPIView):
 
 
 class LoginView(GenericAPIView):
+    """
+    Вью для логирования
+    """
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
@@ -42,6 +48,9 @@ class LoginView(GenericAPIView):
 
 
 class ProfileView(RetrieveUpdateDestroyAPIView):
+    """
+    Вью для работы с профилем
+    """
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
 
@@ -54,6 +63,9 @@ class ProfileView(RetrieveUpdateDestroyAPIView):
 
 
 class UpdatePasswordView(GenericAPIView):
+    """
+    Вью для изменения пароля
+    """
     serializer_class = UpdatePasswordSerializer
     permission_classes = [IsAuthenticated]
 

@@ -8,19 +8,21 @@ from rest_framework.pagination import LimitOffsetPagination
 
 from goals.filter import GoalDateFilter, CategoryBoardFilter
 from goals.models import GoalCategory, Goal, GoalComment, BoardParticipant, Board
-from goals.permissions import BoardPermissions, GoalCategoryPermissions, GoalBoardPermissions
+from goals.permissions import BoardPermissions, GoalCategoryPermission, GoalPermission, CommentPermission
 from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, GoalCategoryCreateSerializer, \
     GoalSerializer, GoalCommentCreateSerializer, GoalCommentSerializer, BoardCreateSerializer, BoardListSerializer, \
     BoardSerializer
 
 
 class GoalCategoryCreateView(CreateAPIView):
+    """Вью для создания категории"""
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCategoryCreateSerializer
 
 
 class GoalCategoryListView(ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    """Вью для показа всех категорий"""
+    permission_classes = [GoalCategoryPermission]
     serializer_class = GoalCategorySerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     filterset_class = CategoryBoardFilter
@@ -35,8 +37,11 @@ class GoalCategoryListView(ListAPIView):
 
 
 class GoalCategoryView(RetrieveUpdateDestroyAPIView):
+    """
+    Вью для изменения и удаления категорий
+    """
     serializer_class = GoalCategorySerializer
-    permission_classes = [GoalCategoryPermissions]
+    permission_classes = [GoalCategoryPermission]
 
     def get_queryset(self):
         return GoalCategory.objects.select_related('user').filter(
@@ -51,12 +56,18 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
 
 
 class GoalCreateView(CreateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    """
+    Вью для создания цели
+    """
+    permission_classes = [GoalPermission]
     serializer_class = GoalCreateSerializer
 
 
 class GoalView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticated, GoalBoardPermissions]
+    """
+    Вью для работы с целью
+    """
+    permission_classes = [GoalPermission]
     serializer_class = GoalSerializer
 
     def get_queryset(self):
@@ -73,7 +84,10 @@ class GoalView(RetrieveUpdateDestroyAPIView):
 
 
 class GoalListView(ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    """
+    Вью для отображения всех целей
+    """
+    permission_classes = [GoalPermission]
     serializer_class = GoalSerializer
     pagination_class = LimitOffsetPagination
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
@@ -91,14 +105,20 @@ class GoalListView(ListAPIView):
 
 
 class GoalCommentCreateView(CreateAPIView):
+    """
+    Вью для создания комментариев
+    """
     model = GoalComment
     serializer_class = GoalCommentCreateSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [GoalPermission]
 
 
 class GoalCommentListView(ListAPIView):
+    """
+    Вью для отображения всех комментариев
+    """
     model = GoalComment
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [CommentPermission]
     serializer_class = GoalCommentSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['goal', ]
@@ -111,8 +131,11 @@ class GoalCommentListView(ListAPIView):
 
 
 class GoalCommentView(RetrieveUpdateDestroyAPIView):
+    """
+    Вью для работы с комментариями
+    """
     model = GoalComment
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [CommentPermission]
     serializer_class = GoalCommentSerializer
 
     def get_queryset(self):
@@ -120,16 +143,22 @@ class GoalCommentView(RetrieveUpdateDestroyAPIView):
 
 
 class BoardCreatedView(CreateAPIView):
+    """
+    Вью для создания досок
+    """
     serializer_class = BoardCreateSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [BoardPermissions]
 
     def perform_create(self, serializer):
         BoardParticipant.objects.create(user=self.request.user, board=serializer.save())
 
 
-class BoardLisrView(ListAPIView):
+class BoardListView(ListAPIView):
+    """
+    Вью для отображения всех досок
+    """
     serializer_class = BoardListSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [BoardPermissions]
     filter_backends = [OrderingFilter]
     ordering = ['title']
 
@@ -138,6 +167,9 @@ class BoardLisrView(ListAPIView):
 
 
 class BoardView(RetrieveUpdateDestroyAPIView):
+    """
+    Вью для работы с доской
+    """
     permission_classes = [BoardPermissions]
     serializer_class = BoardSerializer
 

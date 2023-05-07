@@ -5,6 +5,7 @@ from core.models import User
 
 
 class BaseModel(models.Model):
+    """Базовая модель"""
     created = models.DateTimeField(verbose_name="Дата создания")
     updated = models.DateTimeField(verbose_name="Дата последнего обновления")
 
@@ -19,6 +20,9 @@ class BaseModel(models.Model):
 
 
 class Board(BaseModel):
+    """
+    Модель доски
+    """
     class Meta:
         verbose_name = "Доска"
         verbose_name_plural = "Доски"
@@ -28,6 +32,9 @@ class Board(BaseModel):
 
 
 class BoardParticipant(Board):
+    """
+    Модель пользователей доской
+    """
     class Meta:
         unique_together = ("board", "user")
         verbose_name = "Участник"
@@ -56,6 +63,9 @@ class BoardParticipant(Board):
 
 
 class GoalCategory(BaseModel):
+    """
+    Модель категории
+    """
     class Meta:
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
@@ -72,6 +82,9 @@ class GoalCategory(BaseModel):
 
 
 class Goal(BaseModel):
+    """
+    Модель цели
+    """
     class Status(models.IntegerChoices):
         to_do = 1, 'К выполнению'
         in_progress = 2, 'В процессе'
@@ -101,6 +114,9 @@ class Goal(BaseModel):
 
 
 class GoalComment(BaseModel):
+    """
+    Модель комментариев
+    """
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Коментарии'

@@ -6,6 +6,9 @@ from goals.models import Goal, GoalCategory
 
 
 class GoalDateFilter(rest_framework.FilterSet):
+    """
+    Фильтер для даты
+    """
     class Meta:
         model = Goal
         fields = {
@@ -21,6 +24,9 @@ class GoalDateFilter(rest_framework.FilterSet):
 
 
 class CategoryBoardFilter(rest_framework.FilterSet):
+    """
+    Фильтер для категрии доски
+    """
     class Meta:
         model = GoalCategory
         fields = {
