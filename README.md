@@ -15,9 +15,9 @@ ____
 ## Stack: ##
 Python 3.10
 
-Django
+Django 4.1.7
 
-Postgres
+PostgresQL
 
 Docker
 
