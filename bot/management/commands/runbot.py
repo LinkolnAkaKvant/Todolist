@@ -37,7 +37,7 @@ class Command(BaseCommand):
                     self.handle_message(item.message)
 
     def create_goal(self, user, tg_user) -> Any:
-        categories = GoalCategory.objects.all()
+        categories = GoalCategory.objects.filter(is_deleted=False)
         cat_text = ''
         for cat in categories:
             cat_text += f'{cat.id}: {cat.title} \n'
@@ -64,7 +64,7 @@ class Command(BaseCommand):
             user = tg_user_model.user
 
             if command == '/goals':
-                data = Goal.objects.filter(user=user, status__in=[1, 2])
+                data = Goal.objects.filter(user=user, status__in=[1, 2], category__usercategory__user=user)
                 goal_text = ''
                 i = 1
                 for goal in data:
