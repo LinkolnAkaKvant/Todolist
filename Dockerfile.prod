@@ -3,7 +3,7 @@ FROM python:3.10.9-slim
 WORKDIR /diploma_app
 COPY requirements.txt .
 RUN apt-get update && apt-get install -y python3-pip
-RUN pip install -r requirements.txt
+RUN pip install --verbose -r requirements.txt
 COPY . .
 ENTRYPOINT ["bash", "entrypoint.sh"]
 EXPOSE 8000
