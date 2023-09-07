@@ -63,3 +63,6 @@ Docker
 #### Команда для запуска проекта | Project start command: ####
 
 - python manage.py runserver
+
+  ### PS ###
+  Посмотреть развернутый проект можно по ссылке http://158.160.9.89/auth
